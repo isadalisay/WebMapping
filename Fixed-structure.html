@@ -102,8 +102,9 @@
               map2.touchZoomRotate.disableRotation();
             // 2.6 Change the map pointers
               // Change the map pointers
-	            map.getCanvas().style.cursor = 'auto';
-	            map2.getCanvas().style.cursor = 'auto';
+	            map.getCanvas().style.cursor = 'pointer';
+	            map2.getCanvas().style.cursor = 'pointer';
+              map3.getCanvas().style.cursor = 'pointer'
             // 3 
             var map3 = new mapboxgl.Map({
               container: 'map3', // id of a div on your page, where the map will be inserted
