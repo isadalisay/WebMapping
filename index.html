@@ -5,8 +5,8 @@
      <title>Owners vs Renters Map</title>
       <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
      <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v3.2.0/mapbox-gl.js'></script>
-     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v3.2.0/mapbox-gl.css' rel='stylesheet' />
+     <script src="https://api.mapbox.com/mapbox-gl-js/v3.20.0/mapbox-gl.js"></script>
+     <link href="https://api.mapbox.com/mapbox-gl-js/v3.20.0/mapbox-gl.css" rel="stylesheet">
      <style>
          body { margin:0; padding:0; }
          #map { position:absolute; top:0; bottom:0; width:100%; }
@@ -72,10 +72,10 @@
 
         
           .renter {
-           color:#4bcc00;
+           color:#d8b365;
           }
           .owner{
-           color:#bf00e6;
+           color:#5ab4ac;
           }
 
             /* style for items with the class "chevron" */
@@ -118,7 +118,9 @@
      mapboxgl.accessToken = 'pk.eyJ1IjoiaXNhZGFsaSIsImEiOiJjbW5pMDEwZWEwODFmMnBwcG50aTZ0Y2F4In0.CWgFWJLdW0XP0RIF-OGg-w'; 
      var map = new mapboxgl.Map({
          container: 'map', // container id
-         style: 'mapbox://styles/isadali/cmnz4ujat003k01sheawnbhoo' // stylesheet location
+         style: 'mapbox://styles/isadali/cmnz4ujat003k01sheawnbhoo',   // stylesheet location
+         center: [-122.66022204184569, 45.51697987729754],
+         zoom: 9
      });
      // Add zoom and rotation controls to the map.
      map.addControl(new mapboxgl.NavigationControl(), 'top-left');
