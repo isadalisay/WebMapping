@@ -12,16 +12,16 @@
     <!--    Include the reference to the Mapbox CSS here in between <head> tags  -->
     
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v3.20.0/mapbox-gl.css' rel='stylesheet' />    <style>
-        /* Insert the additional CSS code here between the <style> tags   */
+        /* Insert the additional CSS code here between the <style> tags  */
         
       body { margin:0; padding:0; }
-      #map { position:absolute; top:0; bottom:0; width:100%; } 
+      #map { position:absolute; top: 0; bottom: 0; width:100%; } /* add styling */
 
       #banner { z-index: 9999; 
-         background-color:white; 
+         background-color:lightgrey; 
          opacity: 100%; 
          text-align: left;
-         color: darkslategray;
+         color: black;
          position: relative
      }
 
@@ -29,24 +29,23 @@
   </head>
 
   <body>
-    <!--  Insert the map div here in the <body> of the page   -->
+    <!--  Insert the map div here in the <body> of the page  -->
     <div id='map'></div>
 
     <div id='banner'>
-     		<h1>Change in Temperature per County</h1>
+     		<h1>Colorado Mountain Summits by County</h1>
  	  </div>
 
-     
-    <!--  Insert the title div here -->
+    <!--  Insert the title div here-->
     <div id='title'></div>
     <script>
           mapboxgl.accessToken = 'pk.eyJ1IjoiaXNhZGFsaSIsImEiOiJjbW5pMDEwZWEwODFmMnBwcG50aTZ0Y2F4In0.CWgFWJLdW0XP0RIF-OGg-w'
         // initialize the map 
            var map = new mapboxgl.Map({
             container: 'map', // id of a div on your page, where the map will be inserted
-            style: 'mapbox://styles/isadali/cmodbjzj3004k01r43ouq1wx5', // stylesheet location
-            center: [-103.10956604979594, 40.14539561595348], 
-            zoom: 3.5 
+            style: 'mapbox://styles/isadali/cmohvrwuj000201st2eae03zl', // stylesheet location
+            center: [-105.72320374284182, 40.33694797094234], 
+            zoom: 9.75
             });
 
             map.addControl(new mapboxgl.NavigationControl({
