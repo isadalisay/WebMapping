@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Grocery Stores in Los Angeles</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.24.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.24.0/mapbox-gl.js"></script>
+<style>
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 0; bottom: 0; width: 60%; }
+#features {
+        width: 40%;
+        margin-left: 60%;
+        height: 100vh;
+        font-family: sans-serif;
+        overflow-y: scroll;
+        background-color: #fafafa;
+    }
+    section {
+        padding: 25px 50px;
+        line-height: 25px;
+        min-height: 30vh; /* vh viewport height*/
+        border-bottom: 1px solid #ddd;
+        opacity: 0.25;
+        font-size: 13px;
+    }
+    section.active {
+        opacity: 1;
+    }
+    section:last-child {
+        border-bottom: none;
+        margin-bottom: 200px;
+    }
+</style>
+</head>
+<body>
+<div id="map"></div>
+
+<div id="features">
+    <section id="Introduction" class="active">
+        <h3>Grocery Stores in Los Angeles in Relation to Census Tract Income</h3>
+        <p>Overall description that I def need to work on and lock in on. Include citations too!</p>
+    </section>
+
+    <section id="store1">
+        <h3>1. Trader Joe's</h3>
+        <p>This is the description for your first grocery store destination. Since it is the start of the tour, the map will fly directly here first.</p>
+    </section>
+    
+    <section id="store2">
+        <h3>2. 99 Ranch Market</h3>
+        <p>As you scroll into this section, the map will trigger the animation along route1, drawing the path connecting Store 1 to Store 2.</p>
+    </section>
+    
+    <section id="store3">
+        <h3>3. Superior Grocer</h3>
+        <p>Scrolling here triggers the animation along route2, showing the path from the second store to this location.</p>
+    </section>
+    
+    <section id="store4">
+        <h3>4. Ralph's</h3>
+        <p>This section triggers the animation along route3, tracing your journey to the fourth location.</p>
+    </section>
+    
+    <section id="store5">
+        <h3>5. Erewhon</h3>
+        <p>The final stop on the tour! Entering this section triggers route4, completing the line geometry trace to your fifth grocery store.</p>
+    </section>
+
+<script src="assets/routes.js"></script>
+<script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoiaXNhZGFsaSIsImEiOiJjbW5pMDEwZWEwODFmMnBwcG50aTZ0Y2F4In0.CWgFWJLdW0XP0RIF-OGg-w';
+    const map = new mapboxgl.Map({
+        container: 'map',
+        zoom: 11,
+        center: [-118.25133186154424, 34.05718994885887],
+        pitch: 65,
+        bearing: -180,
+        // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
+        style: 'mapbox://styles/mapbox/standard', // style URL
+        interactive: true
+    });
+
+    let animationFrameId = null; // Keeps track of the animation loop globally
+    let activeChapterName = 'Introduction'
+    // Select any path dynamically
+    const chapters = {
+        'Introduction': {
+            center: [-118.25133186154424, 34.05718994885887],
+            routeData: null, 
+            zoom: 18,
+            pitch: 65
+        },
+        'store1': {
+            center: [-118.14699177721579, 34.135089904093014],
+            routeData: null, // Points to const route1 from routes.js
+            zoom: 18,
+            pitch: 65
+        },
+        'store2': {
+            center: [-118.13358494804402, 34.06370748471705],
+            routeData: routeConfig.route1, // Points to const route2 from routes.js
+            zoom: 18,
+            pitch: 65
+        },
+        'store3': {
+            center: [-118.18655572557205, 33.968507119453626],
+            routeData: routeConfig.route2, // Points to const route3 from routes.js
+            zoom: 18,
+            pitch: 65
+        },
+        'store4': {
+            center: [-118.30830776785457, 33.9618605188256],
+            routeData: routeConfig.route3, // Points to const route4 from routes.js
+            zoom: 18,
+            pitch: 65
+        },
+        'store5': {
+            center: [-118.35670700343856, 34.07689247537038],
+            routeData: routeConfig.route4,
+            zoom: 18,
+            pitch: 65
+        }
+    };
+
+    // add terrain, sky, and line layers once the style has loaded
+    map.on('style.load', () => {
+        map.addSource('mapbox-dem', {
+            'type': 'raster-dem',
+            'url': 'mapbox://mapbox.mapbox-terrain-dem-v1',
+            'tileSize': 512,
+            'maxzoom': 20
+        });
+        map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.5 });
+        // map.addLayer({
+        // 'id': '3d-buildings',
+        // 'source': 'composite',            // Uses Mapbox's default vector tile source
+        // 'source-layer': 'building',       // Targets the building data layer
+        // 'type': 'fill-extrusion',         // Enables 3D extrusion
+        // 'minzoom': 15,                    // Buildings look best when zoomed in close
+        // 'paint': {
+        //     // Extrudes the building using the 'height' property from the data
+        //     'fill-extrusion-height': ['get', 'height'],
+            
+        //     // Ensures the building starts from the ground if it has a base height
+        //     'fill-extrusion-base': ['get', 'min_height'],
+            
+        //     // Gives the buildings a nice subtle grey color
+        //     'fill-extrusion-color': '#aaa',
+            
+        //     // Adds a bit of opacity so they don't completely block the map view
+        //     'fill-extrusion-opacity': 0.6
+        //     }
+        //});
+        map.addSource('source1', {
+            type: 'geojson',
+            data: {
+                'type': 'Feature',
+                'properties': {},
+                'geometry': {
+                    'type': 'LineString',
+                    'coordinates': routeConfig.route1.target
+                }
+            }
+        });
+        map.addLayer({
+            type: 'line',
+            source: 'source1',
+            id: 'line1',
+            paint: {
+                'line-color': 'red',
+                'line-width': 5
+            },
+            layout: {
+                'line-cap': 'round',
+                'line-join': 'round'
+            }
+        });
+        map.addSource('source2', {
+            type: 'geojson',
+            data: {
+                'type': 'Feature',
+                'properties': {},
+                'geometry': {
+                    'type': 'LineString',
+                    'coordinates': routeConfig.route2.target
+                }
+            }
+        });
+        map.addLayer({
+            type: 'line',
+            source: 'source2',
+            id: 'line2',
+            paint: {
+                'line-color': 'red',
+                'line-width': 5
+            },
+            layout: {
+                'line-cap': 'round',
+                'line-join': 'round'
+            }
+        });
+        map.addSource('source3', {
+            type: 'geojson',
+            data: {
+                'type': 'Feature',
+                'properties': {},
+                'geometry': {
+                    'type': 'LineString',
+                    'coordinates': routeConfig.route3.target
+                }
+            }
+        });
+        map.addLayer({
+            type: 'line',
+            source: 'source3',
+            id: 'line3',
+            paint: {
+                'line-color': 'red',
+                'line-width': 5
+            },
+            layout: {
+                'line-cap': 'round',
+                'line-join': 'round'
+            }
+        });
+        map.addSource('source4', {
+            type: 'geojson',
+            data: {
+                'type': 'Feature',
+                'properties': {},
+                'geometry': {
+                    'type': 'LineString',
+                    'coordinates': routeConfig.route4.target
+                }
+            }
+        });
+        map.addLayer({
+            type: 'line',
+            source: 'source4',
+            id: 'line4',
+            paint: {
+                'line-color': 'red',
+                'line-width': 5
+            },
+            layout: {
+                'line-cap': 'round',
+                'line-join': 'round'
+            }
+        });
+    });
+
+function triggerRouteAnimation(chapterName) {
+    // 1. Instantly stop any previous animation loops so they don't collide
+    if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+    }
+
+    const currentChapter = chapters[chapterName];
+    console.log(currentChapter)
+    // 2. Reset line layer if we're back at Store 1 (which has no route data)
+    if (!currentChapter || !currentChapter.routeData) {
+        if (map.getSource('trace')) {
+            map.getSource('trace').setData({
+                type: 'Feature',
+                geometry: { type: 'LineString', coordinates: [] }
+            });
+        }
+        return; 
+    }
+    document.getElementById(chapterName).classList.add('active');
+    document.getElementById(activeChapterName).classList.remove('active');
+
+    activeChapterName = chapterName;
+
+    const targetRoute = currentChapter.routeData.target;
+    let cameraRoute = currentChapter.routeData.camera;
+
+    // FIX: If camera coordinates are empty or missing, fallback to using the target path 
+    // so Turf.js doesn't crash and the map still animates smoothly!
+    if (!cameraRoute || cameraRoute.length < 2) {
+        cameraRoute = targetRoute; 
+    }
+
+    // Safety check: Make sure target data is valid before passing to Turf.js
+    if (!targetRoute || targetRoute.length < 2) return;
+
+    // 3. Setup configuration variables for the movement calculations
+    const animationDuration = 12000; // 12 seconds per route segment
+    const cameraAltitude = 2000;    // Altitude in meters above ground
+    
+    const routeDistance = turf.lineDistance(turf.lineString(targetRoute));
+    const cameraRouteDistance = turf.lineDistance(turf.lineString(cameraRoute));
+
+    let start = null;
+    let historyCoords = []; // Builds up the trail line behind the camera
+
+    // 4. The step-by-step frame animation loop
+    function frame(time) {
+        if (!start) start = time;
+        const phase = (time - start) / animationDuration;
+
+        // Finish animation gracefully at 100% completion
+        if (phase >= 1) {
+            map.getSource('trace').setData({
+                type: 'Feature',
+                geometry: { type: 'LineString', coordinates: targetRoute }
+            });
+            return; 
+        }
+
+        // Calculate positions along both paths relative to current time progress
+        const alongRoute = turf.along(
+            turf.lineString(targetRoute),
+            routeDistance * phase
+        ).geometry.coordinates;
+
+        const alongCamera = turf.along(
+            turf.lineString(cameraRoute),
+            cameraRouteDistance * phase
+        ).geometry.coordinates;
+
+        // Update the drawn red line on the map up to the current point
+        historyCoords.push([alongRoute[0], alongRoute[1]]);
+        map.getSource('trace').setData({
+            type: 'Feature',
+            geometry: {
+                type: 'LineString',
+                coordinates: historyCoords
+            }
+        });
+
+        // Frame update for Mapbox Free Camera
+        const camera = map.getFreeCameraOptions();
+
+        camera.position = mapboxgl.MercatorCoordinate.fromLngLat(
+            { lng: alongCamera[0], lat: alongCamera[1] },
+            cameraAltitude
+        );
+
+        camera.lookAtPoint({
+            lng: alongRoute[0],
+            lat: alongRoute[1]
+        });
+
+        map.setFreeCameraOptions(camera);
+
+        // Request next frame update
+        animationFrameId = requestAnimationFrame(frame);
+    }
+
+    // Kickstart the loop
+    animationFrameId = requestAnimationFrame(frame);
+}
+
+function isElementOnScreen(id) {
+    const element = document.getElementById(id);
+    const bounds = element.getBoundingClientRect();
+    return bounds.top < window.innerHeight / 2 && bounds.bottom > 0;
+}
+
+function setActiveChapter(chapterName) {
+    if (chapterName === activeChapterName) return;
+
+    document.getElementById(activeChapterName).classList.remove('active');
+    document.getElementById(chapterName).classList.add('active');
+
+    // map.flyTo({
+    //     center: chapters[chapterName].center,
+    //     zoom: chapters[chapterName].zoom,
+    //     pitch: chapters[chapterName].pitch
+    // });
+
+    if (chapters[chapterName].routeData) {
+        triggerRouteAnimation(chapterName);
+    }
+
+    activeChapterName = chapterName;
+}
+
+document.getElementById('features').addEventListener('scroll', () => {
+    for (const chapterName in chapters) {
+        if (isElementOnScreen(chapterName)) {
+            setActiveChapter(chapterName);
+            break;
+        }
+    }
+});   
+</script>
+
+</body>
+</html>
