@@ -99,7 +99,7 @@ body { margin: 0; padding: 0; }
         <p>Despite Pasadena’s massive generational affluence, historical redlining and freeway construction systematically isolated its Black and Latino populations into under-resourced pockets. 
             This spatial segregation created a stark internal wealth divide where high-end commercial infrastructure directly contrasts with historically marginalized neighborhoods.</p>
         <div class="store-photo-container">
-            <img src="photos/tjs.jpg" alt="Trader Joe's first location in Pasadena" class="store-photo">
+            <img src="photos/tjs.jpg" alt="Exterior storefront view of the original 1967 Trader Joe's location in Pasadena, featuring its classic red facade, vintage signage, and surrounding parking lot." class="store-photo">
             <p class="photo-credit">Photo: Refinery29</p>
         </div>
         <p>Opened in Pasadena in 1967 as the original location, Trader Joe's uses direct-to-manufacturer private labeling to offer premium and organic goods at highly competitive, accessible prices. 
@@ -112,7 +112,7 @@ body { margin: 0; padding: 0; }
         <p>In the late 20th century, affluent Asian immigrants chose to bypass traditional, low-income urban enclaves like Chinatown to establish the nation's Little Taipei refering to the thriving Taiwanese and Taiwanese American communities. 
             This concentrated influx of immigrant middle-class capital created a unique localized economy that anchored wealth retention against broader systemic disparities.</p>
         <div class="store-photo-container">
-            <img src="photos/99.jpg" alt="99 Ranch Monterey Park" class="store-photo">
+            <img src="photos/99.jpg" alt="Street-level view of the 99 Ranch Market storefront in Monterey Park, showing the prominent red and greeen logo and customer walking near the entrance." class="store-photo">
             <p class="photo-credit">Photo: Yelp</p>
         </div>
         <p> Originally named "99 Price Market," the number nine is considered lucky in Chinese culture and a homophone for longevity and "Ranch" was later added to the name to emphasize freshness. 
@@ -125,7 +125,7 @@ body { margin: 0; padding: 0; }
         <p>The collapse of manufacturing in the late 20th century triggered white flight and left Cudahy with an economically vulnerable, working-class Latino population lacking generational wealth. 
             Because its tiny 1-square-mile footprint lacks a lucrative commercial tax base, the city suffers from institutional underfunding that leaves residents reliant on high-volume discount grocers.</p>
         <div class="store-photo-container">
-            <img src="photos/sup.jpg" alt="Superior Grocer Orignal Facade in Northeast LA" class="store-photo">
+            <img src="photos/sup.jpg" alt="A view of the original retro mid-century modern facade of Superior Grocer in Northeast Los Angeles, featuring bold geometric structural architecture." class="store-photo">
             <p class="photo-credit">Photo: Los Angeles Conservancy</p>
         </div>
         <p> Superior Grocer targets low-income neighborhoods by operating a high-volume, low-margin budget format that prioritizes deeply discounted bulk goods and low-cost staples. 
@@ -138,7 +138,7 @@ body { margin: 0; padding: 0; }
         <p>Decades of institutional discrimination and corporate flight culminated in systemic food apartheid, which worsened drastically after major supermarkets abandoned the region following the 1992 civil unrest. 
             While city rebranding initiatives sought to attract new capital, residents continue to face an ongoing racial wealth gap and disproportionately high housing cost burdens.</p>
         <div class="store-photo-container">
-            <img src="photos/ralphs.jpg" alt="Ralphs South Los Angeles" class="store-photo">
+            <img src="photos/ralphs.jpg" alt="Exterior facade of a modern Ralphs supermarket branch in South Los Angeles, showing the round Ralph's logo and mutliple glass windows below the sign" class="store-photo">
             <p class="photo-credit">Photo: Yelp</p>
         </div>
         <p> Founded in 1873 by George A. Ralphs, Ralphs is Southern California’s oldest operating grocery chain. Originally established in downtown Los Angeles, the brand brought innovation to the grocery store like self-service shopping, in-house bakeries, and laser scanning.
@@ -151,7 +151,7 @@ body { margin: 0; padding: 0; }
         <p>Historically protected by exclusionary zoning and predatory lending that barred lower-income families, these Westside cities represent an extreme hyper-concentration of capital. 
             The presence of ultra-luxury retail ecosystems like Erewhon serves as a highly visible monument to the massive economic chasm separating these hillside communities from working-class neighborhoods nearby.</p>
         <div class="store-photo-container">
-            <img src="photos/erewhon.jpeg" alt="Erewhon in Beverly Hills" class="store-photo">
+            <img src="photos/erewhon.jpeg" alt="The hyper-modern, upscale storefront of the Erewhon market location in Beverly Hills, showing rooftop balcony, trees infront of glass windows, and sign is backlight with orange lighting" class="store-photo">
             <p class="photo-credit">Photo: Erewhon</p>
         </div>
         <p> Erewhon utilizes an aggressive, hyper-luxury pricing strategy driven by ultra-exclusive organic sourcing, specialized wellness items, and highly sought out branded products and foods. 
@@ -224,7 +224,7 @@ body { margin: 0; padding: 0; }
             pitch: 65
         },
         'store4': {
-            center: [-118.30830776785457, 33.9618605188256],
+            center: [-118.3076926087106, 33.95949743947618],
             routeData: routeConfig.route3, // Points to const route4 from routes.js
             zoom: 18,
             pitch: 65
@@ -442,7 +442,6 @@ function updateCameraOnScroll() {
     const chapter = chapters[activeSectionId];
     if (!chapter) return;
 
-    // 2. If the chapter has route data, tie the camera position directly to the scroll progress
     // 2. If the chapter has route data, tie the camera position directly to the scroll progress
 if (chapter.routeData) {
     const targetRoute = chapter.routeData.target;
